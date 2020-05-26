@@ -41,4 +41,18 @@ router.put('/Skills', (req, res, next) => {
     models.Skills.updateOne({ _id: id }, { description, experience }).then(info => res.send(info)).catch(next);
 });
 
+router.get('/projects', (req, res, next) => {
+    models.Projects.find().then(projects => res.send(projects)).catch(next);
+});
+
+router.post('/projects', (req, res, next) => {
+    const { title, description, images } = req.body;
+    models.Projects.create({ title, description, images }).then(project => res.send(project)).catch(next);
+})
+
+router.put('/projects', (req, res, next) => {
+    const { id, title, description, images } = req.body;
+    models.Projects.updateOne({ _id: id }, { title, description, images }).then(project => res.send(project)).catch(next);
+});
+
 module.exports = router;
