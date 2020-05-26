@@ -6,11 +6,8 @@ const apiRouter = require('./api');
 
 const app = express();
 
-app.use(cors({
-    origin: config.port,
-    credentials: true
-}));
-
+app.use(cors({ origin: config.port, credentials: true }));
+app.set('json replacer', (key, value) => key === 'password' ? undefined : value);
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser(config.secret));
 app.use(express.json());
