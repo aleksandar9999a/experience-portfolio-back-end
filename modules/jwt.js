@@ -1,4 +1,4 @@
-const config = require('./environments/environments');
+const config = require('./../environments/environments');
 const jwt = require('jsonwebtoken');
 
 module.exports = {
