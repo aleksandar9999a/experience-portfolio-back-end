@@ -12,7 +12,7 @@ module.exports = {
                 resolve(token);
             }));
     },
-    verify: function (token) {
+    verifyToken: function (token) {
         return new Promise((resolve, reject) => {
             jwt.verify(token, config.secret, (err, data) => {
                 if (err) {
