@@ -69,7 +69,7 @@ router.post('/login', (req, res, next) => {
         return Promise.all([user, modules.jwt.create({ id: user._id })]);
     }).then(([user, token]) => {
         res.cookie('auth_cookie', token, { httpOnly: true });
-        res.send({ user });
+        res.send(user);
     }).catch(next);
 })
 
