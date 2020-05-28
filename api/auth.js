@@ -28,22 +28,32 @@ router.get('/', (req, res, next) => {
         });
 });
 
-router.get('/main', (req, res, next) => {
-    models.User.find()
-        .then(users => {
-            if (!!users[0]) {
-                let user = users[0];
-                res.send({
-                    firstName: user.firstName,
-                    lastName: user.lastName,
-                    devType: user.devType
-                });
-                return;
-            }
-            res.sendStatus(404);
-            return;
+router.put('/', auth, (req, res, next) => {
+    const token = req.cookies[config.authCookieName];
+    const { firstName, lastName, devType } = req.body;
+
+    Promise.all([modules.jwt.verifyToken(token), models.Blacklist.findOne({ token })])
+        .then(([data, blacklistToken]) => {
+            if (!!blacklistToken) { return Promise.reject(new Error('Token is in blacklist!')) }
+            return models.User.updateOne({ _id: data.id }, { firstName, lastName, devType });
         })
+        .then(user => res.send(user))
         .catch(next);
+})
+
+router.get('/main', (req, res, next) => {
+    models.User.findById(config.mainUserId).then(user => {
+        if (!!user) {
+            res.send({
+                firstName: user.firstName,
+                lastName: user.lastName,
+                devType: user.devType
+            });
+            return;
+        }
+        res.sendStatus(404);
+        return;
+    }).catch(next);
 });
 
 router.get('/logout', (req, res, next) => {
@@ -71,11 +81,6 @@ router.post('/login', (req, res, next) => {
         res.cookie('auth_cookie', token, { httpOnly: true });
         res.send(user);
     }).catch(next);
-})
-
-router.put('/update', auth, (req, res, next) => {
-    const { id, firstName, lastName, devType } = req.body;
-    models.User.updateOne({ _id: id }, { firstName, lastName, devType }).then(user => res.send(user)).catch(next);
 })
 
 module.exports = router;
