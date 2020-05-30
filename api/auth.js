@@ -7,13 +7,7 @@ const { auth } = require('./../modules');
 router.get('/', auth, (req, res, next) => {
     const user = req.user;
     models.User.findById(user._id)
-        .then(user => {
-            if (user) {
-                res.send(user);
-                return;
-            }
-            res.send(null);
-        })
+        .then(u => res.send(u))
         .catch(next);
 });
 
