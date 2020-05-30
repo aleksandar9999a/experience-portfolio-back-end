@@ -4,14 +4,9 @@ const models = require('./../models/');
 const modules = require('./../modules');
 const { auth } = require('./../modules');
 
-router.get('/', (req, res, next) => {
-    const token = req.cookies[config.authCookieName];
-
-    Promise.all([modules.jwt.verifyToken(token), models.Blacklist.findOne({ token })])
-        .then(([data, blacklistToken]) => {
-            if (!!blacklistToken) { return Promise.reject(new Error('Token is in blacklist!')) }
-            return models.User.findById(data.id);
-        })
+router.get('/', auth, (req, res, next) => {
+    const user = req.user;
+    models.User.findById(user._id)
         .then(user => {
             if (user) {
                 res.send(user);
@@ -19,25 +14,14 @@ router.get('/', (req, res, next) => {
             }
             res.send(null);
         })
-        .catch(err => {
-            if (err.message === 'jwt must be provided') {
-                res.send(null);
-                return;
-            }
-            next(err);
-        });
+        .catch(next);
 });
 
 router.put('/', auth, (req, res, next) => {
-    const token = req.cookies[config.authCookieName];
+    const user = req.user;
     const { firstName, lastName, devType } = req.body;
-
-    Promise.all([modules.jwt.verifyToken(token), models.Blacklist.findOne({ token })])
-        .then(([data, blacklistToken]) => {
-            if (!!blacklistToken) { return Promise.reject(new Error('Token is in blacklist!')) }
-            return models.User.updateOne({ _id: data.id }, { firstName, lastName, devType });
-        })
-        .then(user => res.send(user))
+    models.User.updateOne({ _id: user._id }, { firstName, lastName, devType })
+        .then(u => res.send(u))
         .catch(next);
 })
 
