@@ -14,5 +14,13 @@ module.exports = function (req, res, next) {
             req.user = user;
             next();
         })
-        .catch(next);
+        .catch(err => {
+            const errors = ['Token is in blacklist!', 'User is unknown!', 'jwt must be provided'];
+            if (errors.includes(err.message)) {
+                res.send(null);
+                return;
+            }
+
+            next(err);
+        });
 }
