@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const models = require('./../models/');
+const config = require('./../environments/environments');
 const { auth } = require('./../modules');
 
 router.get('/about', (req, res, next) => {
@@ -13,6 +14,7 @@ router.get('/about', (req, res, next) => {
 });
 
 router.get('/skills', (req, res, next) => {
+    models.Skills.findById(config.defaultSkills)
     models.Skills.find().then(info => {
         if (!!info[0]) {
             res.send(info[0]);
