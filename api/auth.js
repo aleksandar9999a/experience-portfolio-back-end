@@ -41,21 +41,6 @@ router.put('/', auth, (req, res, next) => {
         .catch(next);
 })
 
-router.get('/main', (req, res, next) => {
-    models.User.findById(config.mainUserId).then(user => {
-        if (!!user) {
-            res.send({
-                firstName: user.firstName,
-                lastName: user.lastName,
-                devType: user.devType
-            });
-            return;
-        }
-        res.sendStatus(404);
-        return;
-    }).catch(next);
-});
-
 router.get('/logout', (req, res, next) => {
     const token = req.cookies[config.authCookieName];
     models.Blacklist.create({ token }).then(() => {
