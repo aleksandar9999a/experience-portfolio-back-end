@@ -7,7 +7,8 @@ const config = {
         secret: 'qkoedasiumen',
         authCookieName: 'auth_cookie',
         mainUserId: '5eccc82697bf9a2898ee6395',
-        defaultSkills: '5ecc993d34da541ecc689b24'
+        defaultSkills: '5ecc993d34da541ecc689b24',
+        defaultAbout: '5ecc9540c35fce1ba434061f'
     },
     production: {}
 };

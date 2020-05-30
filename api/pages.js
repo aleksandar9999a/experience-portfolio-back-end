@@ -4,24 +4,25 @@ const config = require('./../environments/environments');
 const { auth } = require('./../modules');
 
 router.get('/about', (req, res, next) => {
-    models.AboutMe.find().then(info => {
-        if (!!info[0]) {
-            res.send(info[0]);
-            return;
-        }
-        res.send(404);
-    }).catch(next);
+    models.AboutMe.findById(config.defaultAbout)
+        .then(info => {
+            if (!!info) {
+                res.send(info);
+                return;
+            }
+            res.send(404);
+        }).catch(next);
 });
 
 router.get('/skills', (req, res, next) => {
     models.Skills.findById(config.defaultSkills)
-    models.Skills.find().then(info => {
-        if (!!info[0]) {
-            res.send(info[0]);
-            return;
-        }
-        res.send(404);
-    }).catch(next);
+        .then(info => {
+            if (!!info) {
+                res.send(info);
+                return;
+            }
+            res.send(404);
+        }).catch(next);
 });
 
 router.get('/projects', (req, res, next) => {
