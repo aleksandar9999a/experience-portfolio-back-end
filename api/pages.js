@@ -4,27 +4,12 @@ const { auth } = require('./../modules');
 
 router.get('/about', auth, (req, res, next) => {
     const user = req.user;
-    models.AboutMe.findOne({ creatorId: user._id })
-        .then(info => {
-            if (!!info) {
-                res.send(info);
-                return;
-            }
-            res.sendStatus(404);
-        })
-        .catch(next);
+    models.AboutMe.findOne({ creatorId: user._id }).then(info => res.send(info)).catch(next);
 });
 
 router.get('/skills', auth, (req, res, next) => {
     const user = req.user;
-    models.Skills.findOne({ creatorId: user._id })
-        .then(info => {
-            if (!!info) {
-                res.send(info);
-                return;
-            }
-            res.sendStatus(404);
-        }).catch(next);
+    models.Skills.findOne({ creatorId: user._id }).then(info => res.send(info)).catch(next);
 });
 
 router.get('/projects', (req, res, next) => {
@@ -34,25 +19,19 @@ router.get('/projects', (req, res, next) => {
 router.post('/about', auth, (req, res, next) => {
     const { description, courses } = req.body;
     const user = req.user;
-    models.AboutMe.create({ description, courses, creatorId: user._id })
-        .then(info => res.send(info))
-        .catch(next);
+    models.AboutMe.create({ description, courses, creatorId: user._id }).then(info => res.send(info)).catch(next);
 })
 
 router.post('/Skills', auth, (req, res, next) => {
     const { description, experience } = req.body;
     const user = req.user;
-    models.Skills.create({ description, experience, creatorId: user._id })
-        .then(info => res.send(info))
-        .catch(next);
+    models.Skills.create({ description, experience, creatorId: user._id }).then(info => res.send(info)).catch(next);
 })
 
 router.post('/projects', auth, (req, res, next) => {
     const { title, description, images } = req.body;
     const user = req.user;
-    models.Projects.create({ title, description, images, creatorId: user.id })
-        .then(project => res.send(project))
-        .catch(next);
+    models.Projects.create({ title, description, images, creatorId: user.id }).then(project => res.send(project)).catch(next);
 })
 
 router.put('/about', auth, (req, res, next) => {
@@ -61,7 +40,7 @@ router.put('/about', auth, (req, res, next) => {
     if (user._id.toString() === creatorId) {
         models.AboutMe.updateOne({ _id: id }, { description, courses, creatorId }).then(info => res.send(info)).catch(next);
     } else {
-        next('Unauthorized');
+        res.sendStatus(401);
     }
 });
 
@@ -71,7 +50,7 @@ router.put('/skills', auth, (req, res, next) => {
     if (user._id.toString() === creatorId) {
         models.Skills.updateOne({ _id: id }, { description, experience, creatorId }).then(info => res.send(info)).catch(next);
     } else {
-        next('Unauthorized');
+        res.sendStatus(401);
     }
 });
 
@@ -81,7 +60,7 @@ router.put('/projects', auth, (req, res, next) => {
     if (user._id.toString() === creatorId) {
         models.Projects.updateOne({ _id: id }, { title, description, images, creatorId }).then(project => res.send(project)).catch(next);
     } else {
-        next('Unauthorized');
+        res.sendStatus(401);
     }
 });
 

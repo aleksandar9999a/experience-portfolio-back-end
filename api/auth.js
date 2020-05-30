@@ -6,17 +6,13 @@ const { auth } = require('./../modules');
 
 router.get('/', auth, (req, res, next) => {
     const user = req.user;
-    models.User.findById(user._id)
-        .then(u => res.send(u))
-        .catch(next);
+    models.User.findById(user._id).then(u => res.send(u)).catch(next);
 });
 
 router.put('/', auth, (req, res, next) => {
     const user = req.user;
     const { firstName, lastName, devType } = req.body;
-    models.User.updateOne({ _id: user._id }, { firstName, lastName, devType })
-        .then(u => res.send(u))
-        .catch(next);
+    models.User.updateOne({ _id: user._id }, { firstName, lastName, devType }).then(u => res.send(u)).catch(next);
 })
 
 router.get('/logout', (req, res, next) => {
@@ -41,7 +37,7 @@ router.post('/login', (req, res, next) => {
         }
         return Promise.all([user, modules.jwt.create({ id: user._id })]);
     }).then(([user, token]) => {
-        res.cookie('auth_cookie', token, { httpOnly: true });
+        res.cookie(config.authCookieName, token, { httpOnly: true });
         res.send(user);
     }).catch(next);
 })
