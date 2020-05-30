@@ -10,7 +10,11 @@ const projectsSchema = new Schema({
     type: String,
     required: true
   },
-  images: [{ data: Buffer, contentType: String }]
+  images: [{ data: Buffer, contentType: String }],
+  creatorId: {
+    type: String,
+    required: true
+  },
 });
 
 module.exports = mongoose.model('Projects', projectsSchema);

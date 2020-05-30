@@ -9,7 +9,11 @@ const skillsSchema = new Schema({
   experience: {
     type: Array,
     required: true
-  }
+  },
+  creatorId: {
+    type: String,
+    required: true
+  },
 });
 
 module.exports = mongoose.model('Skills', skillsSchema);

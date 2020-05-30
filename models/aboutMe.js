@@ -9,6 +9,10 @@ const aboutMeSchema = new Schema({
   courses: {
     type: Array,
     required: true
+  },
+  creatorId: {
+    type: String,
+    required: true
   }
 });
 
