@@ -31,15 +31,18 @@ router.post('/register', (req, res, next) => {
 router.post('/login', (req, res, next) => {
     const { email, password } = req.body;
     models.User.findOne({ email, password }).then(user => {
-        if (!user) {
-            res.sendStatus(404);
-            return;
-        }
+        if (!user) { return Promise.reject(new Error('Wrong email or password')); }
         return Promise.all([user, modules.jwt.create({ id: user._id })]);
     }).then(([user, token]) => {
         res.cookie(config.authCookieName, token, { httpOnly: true });
         res.send(user);
-    }).catch(next);
+    }).catch(err => {
+        if (err.message === 'Wrong email or password') {
+            res.sendStatus(404);
+            return;
+        }
+        next(err);
+    });
 })
 
 module.exports = router;
