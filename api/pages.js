@@ -29,9 +29,9 @@ router.post('/Skills', auth, (req, res, next) => {
 })
 
 router.post('/projects', auth, (req, res, next) => {
-    const { title, description, images } = req.body;
+    const { title, description, images, link } = req.body;
     const user = req.user;
-    models.Projects.create({ title, description, images, creatorId: user.id }).then(project => res.send(project)).catch(next);
+    models.Projects.create({ title, description, images, link, creatorId: user.id }).then(project => res.send(project)).catch(next);
 })
 
 router.put('/about', auth, (req, res, next) => {
