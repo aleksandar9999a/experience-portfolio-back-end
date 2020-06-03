@@ -12,8 +12,9 @@ router.get('/skills', auth, (req, res, next) => {
     models.Skills.findOne({ creatorId: user._id }).then(info => res.send(info)).catch(next);
 });
 
-router.get('/projects', (req, res, next) => {
-    models.Projects.find().then(projects => res.send(projects)).catch(next);
+router.get('/projects', auth, (req, res, next) => {
+    const user = req.user;
+    models.Projects.find({ creatorId: user._id }).then(projects => res.send(projects)).catch(next);
 });
 
 router.post('/about', auth, (req, res, next) => {
@@ -22,7 +23,7 @@ router.post('/about', auth, (req, res, next) => {
     models.AboutMe.create({ description, courses, creatorId: user._id }).then(info => res.send(info)).catch(next);
 })
 
-router.post('/Skills', auth, (req, res, next) => {
+router.post('/skills', auth, (req, res, next) => {
     const { description, experience } = req.body;
     const user = req.user;
     models.Skills.create({ description, experience, creatorId: user._id }).then(info => res.send(info)).catch(next);
@@ -63,5 +64,13 @@ router.put('/projects', auth, (req, res, next) => {
         res.sendStatus(401);
     }
 });
+
+router.delete('/projects', auth, (req, res, next) => {
+    const id = req.body.id;
+    const user = req.user;
+    models.Projects.deleteOne({ _id: id, creatorId: user._id}).then(project => {
+        res.send(project)
+    }).catch(next)
+})
 
 module.exports = router;
