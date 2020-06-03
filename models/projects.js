@@ -10,7 +10,7 @@ const projectsSchema = new Schema({
     type: String,
     required: true
   },
-  images: [String],
+  images: [{ id: Number, url: String }],
   link: String,
   creatorId: {
     type: String,
