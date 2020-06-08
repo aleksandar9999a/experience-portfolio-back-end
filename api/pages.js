@@ -56,10 +56,10 @@ router.put('/skills', auth, (req, res, next) => {
 });
 
 router.put('/projects', auth, (req, res, next) => {
-    const { id, title, description, images, creatorId } = req.body;
+    const { _id, title, description, images, creatorId } = req.body;
     const user = req.user;
     if (user._id.toString() === creatorId) {
-        models.Projects.updateOne({ _id: id }, { title, description, images, creatorId }).then(project => res.send(project)).catch(next);
+        models.Projects.updateOne({ _id }, { title, description, images, creatorId }).then(project => res.send(project)).catch(next);
     } else {
         res.sendStatus(401);
     }
