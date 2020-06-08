@@ -18,4 +18,9 @@ router.get('/projects', (req, res, next) => {
     models.Projects.find().then(projects => res.send(projects)).catch(next);
 });
 
+router.get('/projects/:id', (req, res, next) => {
+    const { id } = req.params;
+    models.Projects.findById(id).then(projects => res.send(projects)).catch(next);
+});
+
 module.exports = router;
