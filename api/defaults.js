@@ -7,11 +7,11 @@ router.get('/', (req, res, next) => {
 });
 
 router.get('/about', (req, res, next) => {
-    models.AboutMe.findById(config.defaultAbout).then(info => res.send(info)).catch(next);
+    models.AboutMe.findOne({ creatorId: config.mainUserId }).then(info => res.send(info)).catch(next);
 });
 
 router.get('/skills', (req, res, next) => {
-    models.Skills.findById(config.defaultSkills).then(info => res.send(info)).catch(next);
+    models.Skills.findOne({ creatorId: config.mainUserId }).then(info => res.send(info)).catch(next);
 });
 
 router.get('/projects', (req, res, next) => {
