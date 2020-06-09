@@ -3,8 +3,13 @@ const models = require('./../models/');
 const { auth } = require('./../modules');
 
 router.post('/contact', (req, res, next) => {
-    const { name, email, subject, message } = req.body;
-    models.Contacts.create({ name, email, subject, message }).then(contact => res.send(contact)).catch(next);
+    const { name, email, subject, message, isAnswered = false } = req.body;
+    models.Contacts.create({ name, email, subject, message, isAnswered }).then(contact => res.send(contact)).catch(next);
+})
+
+router.put('/contact', (req, res, next) => {
+    const { _id, name, email, subject, message, isAnswered } = req.body;
+    models.Contacts.updateOne({ _id }, { name, email, subject, message, isAnswered }).then(contact => res.send(contact)).catch(next);
 })
 
 router.get('/contact', auth, (req, res, next) => {
