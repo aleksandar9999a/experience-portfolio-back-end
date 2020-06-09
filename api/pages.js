@@ -2,40 +2,40 @@ const router = require('express').Router();
 const models = require('./../models');
 const { auth } = require('./../modules');
 
-router.get('/about', auth, (req, res, next) => {
+router.get('/about', auth(false), (req, res, next) => {
     const user = req.user;
     models.AboutMe.findOne({ creatorId: user._id }).then(info => res.send(info)).catch(next);
 });
 
-router.get('/skills', auth, (req, res, next) => {
+router.get('/skills', auth(false), (req, res, next) => {
     const user = req.user;
     models.Skills.findOne({ creatorId: user._id }).then(info => res.send(info)).catch(next);
 });
 
-router.get('/projects', auth, (req, res, next) => {
+router.get('/projects', auth(false), (req, res, next) => {
     const user = req.user;
     models.Projects.find({ creatorId: user._id }).then(projects => res.send(projects)).catch(next);
 });
 
-router.post('/about', auth, (req, res, next) => {
+router.post('/about', auth(false), (req, res, next) => {
     const { description, courses } = req.body;
     const user = req.user;
     models.AboutMe.create({ description, courses, creatorId: user._id }).then(info => res.send(info)).catch(next);
 })
 
-router.post('/skills', auth, (req, res, next) => {
+router.post('/skills', auth(false), (req, res, next) => {
     const { description, experience } = req.body;
     const user = req.user;
     models.Skills.create({ description, experience, creatorId: user._id }).then(info => res.send(info)).catch(next);
 })
 
-router.post('/projects', auth, (req, res, next) => {
+router.post('/projects', auth(false), (req, res, next) => {
     const { title, description, images, link } = req.body;
     const user = req.user;
     models.Projects.create({ title, description, images, link, creatorId: user.id }).then(project => res.send(project)).catch(next);
 })
 
-router.put('/about', auth, (req, res, next) => {
+router.put('/about', auth(false), (req, res, next) => {
     const { id, description, courses, creatorId } = req.body;
     const user = req.user;
     if (user._id.toString() === creatorId) {
@@ -45,7 +45,7 @@ router.put('/about', auth, (req, res, next) => {
     }
 });
 
-router.put('/skills', auth, (req, res, next) => {
+router.put('/skills', auth(false), (req, res, next) => {
     const { id, description, experience, creatorId } = req.body;
     const user = req.user;
     if (user._id.toString() === creatorId) {
@@ -55,7 +55,7 @@ router.put('/skills', auth, (req, res, next) => {
     }
 });
 
-router.put('/projects', auth, (req, res, next) => {
+router.put('/projects', auth(false), (req, res, next) => {
     const { _id, title, description, images, creatorId } = req.body;
     const user = req.user;
     if (user._id.toString() === creatorId) {
@@ -65,7 +65,7 @@ router.put('/projects', auth, (req, res, next) => {
     }
 });
 
-router.delete('/projects', auth, (req, res, next) => {
+router.delete('/projects', auth(false), (req, res, next) => {
     const id = req.body.id;
     const user = req.user;
     models.Projects.deleteOne({ _id: id, creatorId: user._id}).then(project => {

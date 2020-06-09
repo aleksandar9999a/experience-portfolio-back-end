@@ -4,15 +4,22 @@ const models = require('./../models/');
 const modules = require('./../modules');
 const { auth } = require('./../modules');
 
-router.get('/', auth, (req, res, next) => {
+router.get('/', auth(false), (req, res, next) => {
     const user = req.user;
     models.User.findById(user._id).then(u => res.send(u)).catch(next);
 });
 
-router.put('/', auth, (req, res, next) => {
+router.put('/', auth(false), (req, res, next) => {
     const user = req.user;
     const { firstName, lastName, devType } = req.body;
-    models.User.updateOne({ _id: user._id }, { firstName, lastName, devType }).then(u => res.send(u)).catch(next);
+    models.User.updateOne({ _id: user._id }, { firstName, lastName, devType, isAdmin: user.isAdmin }).then(u => res.send(u)).catch(next);
+})
+
+router.put('/setAdmin', auth(true), (req, res, next) => {
+    const { _id, isAdmin } = req.body;
+    models.User.findById(_id).then(user => {
+        return models.User.updateOne({ _id }, { ...user, isAdmin });
+    }).then(u => res.send(u)).catch(next);
 })
 
 router.get('/logout', (req, res, next) => {
