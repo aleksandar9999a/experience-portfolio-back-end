@@ -16,7 +16,8 @@ const contacts = new mongoose.Schema({
   message: {
     type: String,
     required: true
-  }
+  },
+  isAnswered: Boolean
 });
 
 module.exports = mongoose.model('contacts', contacts);
