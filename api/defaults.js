@@ -15,7 +15,7 @@ router.get('/skills', (req, res, next) => {
 });
 
 router.get('/projects', (req, res, next) => {
-    models.Projects.find().then(projects => res.send(projects)).catch(next);
+    models.Projects.find({ creatorId: config.mainUserId}).then(projects => res.send(projects)).catch(next);
 });
 
 router.get('/projects/:id', (req, res, next) => {
