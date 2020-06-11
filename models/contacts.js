@@ -18,6 +18,11 @@ const contacts = new mongoose.Schema({
     required: true
   },
   isAnswered: Boolean
+}, {
+  timestamps: {
+    createdAt: 'created_at',
+    updatedAt: 'updated_at'
+  }
 });
 
 module.exports = mongoose.model('contacts', contacts);
