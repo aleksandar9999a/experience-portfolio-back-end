@@ -14,10 +14,10 @@ router.post('/projects', auth(false), (req, res, next) => {
 })
 
 router.put('/projects', auth(false), (req, res, next) => {
-    const { _id, title, description, images, creatorId } = req.body;
+    const { _id, title, description, images, link, creatorId } = req.body;
     const user = req.user;
     if (user._id.toString() === creatorId) {
-        models.Projects.updateOne({ _id }, { title, description, images, creatorId }).then(project => res.send(project)).catch(next);
+        models.Projects.updateOne({ _id }, { title, description, images, link, creatorId }).then(project => res.send(project)).catch(next);
     } else {
         res.sendStatus(401);
     }
@@ -26,7 +26,7 @@ router.put('/projects', auth(false), (req, res, next) => {
 router.delete('/projects', auth(false), (req, res, next) => {
     const id = req.body.id;
     const user = req.user;
-    models.Projects.deleteOne({ _id: id, creatorId: user._id}).then(project => {
+    models.Projects.deleteOne({ _id: id, creatorId: user._id }).then(project => {
         res.send(project)
     }).catch(next)
 })
